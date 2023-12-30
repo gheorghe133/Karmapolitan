@@ -1,4 +1,6 @@
-# Lyrical
+## Karmapolitan
+
+Karmapolitan is a straightforward interface designed for displaying song lyrics, powered by LyricsGenius – a Python client for the Genius.com API.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.8.
 

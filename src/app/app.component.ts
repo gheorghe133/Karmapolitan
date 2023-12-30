@@ -95,7 +95,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
   ],
 })
 export class AppComponent {
-  title = "Lyrical";
+  title = "Karmapolitan";
 
   searchForm: FormGroup;
   lyrics: any | undefined;
@@ -125,12 +125,10 @@ export class AppComponent {
       )
       .subscribe(
         (result) => {
-          console.log(result);
           this.lyrics = result;
           this.hasError = false;
         },
         (error) => {
-          console.log(error);
           this.hasError = true;
           this.errorMessage = error.error.error;
         }
