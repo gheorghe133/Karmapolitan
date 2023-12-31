@@ -15,80 +15,132 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
   standalone: true,
   imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterOutlet],
   template: `
-    <form [formGroup]="searchForm" (onSubmit)="search()">
-      <input type="text" placeholder="song_name" formControlName="song_name" />
-      <br />
-      <input
-        type="text"
-        placeholder="song_artist"
-        formControlName="song_artist"
-      />
-      <br />
-      <button (click)="search()">Search</button>
-    </form>
+    <section class="section">
+      <div class="container-form">
+        <h1 class="title">Karmapolitan</h1>
+        <form [formGroup]="searchForm" (onSubmit)="search()">
+          <input
+            type="text"
+            placeholder="Sont title ..."
+            formControlName="song_name"
+          />
+          <br />
+          <input
+            type="text"
+            placeholder="Sont artist ..."
+            formControlName="song_artist"
+          />
+          <br />
+          <button (click)="search()">Search</button>
+        </form>
 
-    <div class="information">
-      @if (this.hasError) {
-      <p class="error">{{ this.errorMessage }}</p>
-      } @else{
-      <img
-        class="image"
-        src="{{ this.lyrics?.header_image_url }}"
-        alt="{{ this.lyrics?.header_image_url }}"
-      />
-      <h1>{{ this.lyrics?.full_title }}</h1>
-      <p class="lyrics">{{ this.lyrics?.lyrics }}</p>
-      }
-    </div>
+        <div class="error-container">
+          @if (this.hasError) {
+          <p class="error">{{ this.errorMessage }}</p>
+          }
+        </div>
+      </div>
+      <div class="container-lyrics">
+        <div class="information">
+          @if (!this.hasError) {
+          <img
+            class="image"
+            src="{{ this.lyrics?.header_image_url }}"
+            alt="{{ this.lyrics?.header_image_url }}"
+          />
+          <h1>{{ this.lyrics?.full_title }}</h1>
+          <p class="lyrics">{{ this.lyrics?.lyrics }}</p>
+          }
+        </div>
+      </div>
+    </section>
   `,
   styles: [
     `
-      form {
-        input[type="text"] {
-          border: 1px solid #d1d5db;
-          color: #f3f4f6;
-          font-size: 0.875rem;
-          border-radius: 0.375rem;
-          display: block;
-          padding: 0.625rem;
-          background-color: #1f2937;
-          border-color: #4b5563;
-          outline: none;
-        }
-
-        input[type="text"]::placeholder {
-          color: #a0aec0;
-        }
-
-        button {
-          border: 1px solid #d1d5db;
-          color: #f3f4f6;
-          font-size: 0.875rem;
-          border-radius: 0.375rem;
-          display: block;
-          padding: 0.625rem;
-          background-color: #1f2937;
-          border-color: #4b5563;
-          outline: none;
-          cursor: pointer;
-        }
+      .section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      .information {
-        margin-top: 25px;
+      .container-form {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-        .image {
-          width: 300px;
+        .title {
+          font-size: 35px;
+          letter-spacing: 10px;
         }
 
-        .lyrics {
-          white-space: pre-wrap;
-          line-height: 24px;
+        form {
+          width: 80%;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+
+          input[type="text"] {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            color: #f3f4f6;
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+            padding: 0.625rem;
+            background-color: #1f2937;
+            border-color: #4b5563;
+            outline: none;
+          }
+
+          input[type="text"]::placeholder {
+            color: #a0aec0;
+          }
+
+          button {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            color: #f3f4f6;
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+            display: block;
+            padding: 0.625rem;
+            background-color: #1e3a8a;
+            border-color: #1e3a8a;
+            outline: none;
+            cursor: pointer;
+          }
+        }
+
+        .error-container {
+          height: 25px;
         }
 
         .error {
           font-weight: 600;
-          color: red;
+          color: #e11d48;
+        }
+      }
+
+      .container-lyrics {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+
+        .information {
+          .image {
+            width: 300px;
+          }
+
+          .lyrics {
+            white-space: pre-wrap;
+            line-height: 24px;
+          }
         }
       }
     `,
