@@ -6,7 +6,7 @@ import { Observable } from "rxjs";
   providedIn: "root",
 })
 export class LyricsService {
-  private apiURL = "http://127.0.0.1:5000/get_lyrics";
+  private apiURL = "https://karmapolitan-server.vercel.app/get_lyrics";
 
   constructor(private httpClient: HttpClient) {}
 
