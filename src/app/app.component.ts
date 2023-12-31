@@ -113,11 +113,6 @@ export class AppComponent {
   }
 
   search() {
-    console.log(
-      this.searchForm.value.song_name,
-      this.searchForm.value.song_artist
-    );
-
     this.lyricsService
       .getLyrics(
         this.searchForm.value.song_name,
