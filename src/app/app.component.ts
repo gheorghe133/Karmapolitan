@@ -171,7 +171,6 @@ import { animate, style, transition, trigger } from "@angular/animations";
       .section .container-lyrics .lyrics-background {
         height: 100%;
         width: 100%;
-        object-fit: cover;
         position: absolute;
         filter: blur(100px);
         transition: 0.5s ease-in;
@@ -323,7 +322,7 @@ export class AppComponent {
 
   public getBackgroundStyle() {
     if (this.lyrics && this.lyrics.header_image_url) {
-      return `url('${this.lyrics.header_image_url}')`;
+      return `url('${this.lyrics.header_image_url}') center/cover`;
     } else {
       return "";
     }
