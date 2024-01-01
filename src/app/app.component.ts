@@ -22,18 +22,25 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
           <input
             class="form-input"
             type="text"
-            placeholder="Sont title ..."
+            placeholder="Song title ..."
             formControlName="song_name"
           />
           <br />
           <input
             class="form-input"
             type="text"
-            placeholder="Sont artist ..."
+            placeholder="Song artist ..."
             formControlName="song_artist"
           />
           <br />
-          <button class="form-button" (click)="search()">Search</button>
+          <button
+            class="form-button"
+            [disabled]="this.searchForm.invalid"
+            [class.disabled]="this.searchForm.invalid"
+            (click)="search()"
+          >
+            Search
+          </button>
         </form>
 
         <div class="error-container">
@@ -43,13 +50,13 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         </div>
       </div>
       <div class="container-lyrics">
+        @if (!this.hasError) {
         <div
           class="lyrics-background"
           [style.background]="getBackgroundStyle()"
         ></div>
 
         <div class="lyrics-information">
-          @if (!this.hasError) {
           <img
             class="lyrics-image"
             src="{{ this.lyrics?.header_image_url }}"
@@ -57,8 +64,8 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
           />
           <h1 class="lyrics-title">{{ this.lyrics?.full_title }}</h1>
           <p class="lyrics">{{ this.lyrics?.lyrics }}</p>
-          }
         </div>
+        }
       </div>
     </section>
   `,
@@ -123,6 +130,12 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         border-color: #1e3a8a;
         outline: none;
         cursor: pointer;
+        transition: 0.2s ease-in;
+      }
+
+      .section .container-form .form .disabled {
+        cursor: not-allowed !important;
+        opacity: 0.5;
       }
 
       .section .container-form .error-container {
