@@ -258,7 +258,7 @@ import { animate, style, transition, trigger } from "@angular/animations";
         }
       }
 
-      @media (max-width: 380px) {
+      @media (max-width: 412px) {
         .section .container-form .form {
           padding: 0;
         }
