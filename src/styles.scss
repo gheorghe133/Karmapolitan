@@ -2,9 +2,26 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;1,300&family=Rubik:wght@500&display=swap");
 
+:root {
+  --background-color: #0f172a;
+  --text-color: white;
+  --font-primary: "Poppins", sans-serif;
+  --font-secondary: "Rubik", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  background-color: #0f172a;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-family: "Rubik", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-primary), var(--font-secondary);
 }
