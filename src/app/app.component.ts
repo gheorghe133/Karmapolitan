@@ -269,7 +269,13 @@ import { animate, style, transition, trigger } from "@angular/animations";
 
         .section .container-lyrics .lyrics-information .lyrics-image {
           width: 100%;
-          height: 100%;
+          min-height: 370px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .section .container-lyrics .lyrics-information .lyrics-image {
+          min-height: 320px;
         }
       }
     `,
