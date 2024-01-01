@@ -50,7 +50,9 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         </div>
       </div>
       <div class="container-lyrics">
-        @if (!this.hasError) {
+        @if (loader){
+        <div class="lyrics-loader"></div>
+        } @if(!hasError && !loader && lyrics){
         <div
           class="lyrics-background"
           [style.background]="getBackgroundStyle()"
@@ -59,11 +61,11 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         <div class="lyrics-information">
           <img
             class="lyrics-image"
-            src="{{ this.lyrics?.header_image_url }}"
-            alt="{{ this.lyrics?.header_image_url }}"
+            [src]="lyrics.header_image_url"
+            [alt]="lyrics.header_image_url"
           />
-          <h1 class="lyrics-title">{{ this.lyrics?.full_title }}</h1>
-          <p class="lyrics">{{ this.lyrics?.lyrics }}</p>
+          <h1 class="lyrics-title">{{ lyrics.full_title }}</h1>
+          <p class="lyrics">{{ lyrics.lyrics }}</p>
         </div>
         }
       </div>
@@ -152,6 +154,9 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         height: 100%;
         position: relative;
         display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
 
       .section .container-lyrics .lyrics-background {
@@ -186,6 +191,42 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         line-height: 24px;
       }
 
+      .section .container-lyrics .lyrics-loader {
+        width: 56px;
+        height: 56px;
+        display: grid;
+        border: 4.5px solid #0000;
+        border-radius: 50%;
+        border-color: #dbdcef #0000;
+        animation: lyrics-loader 1s infinite linear;
+      }
+
+      .section .container-lyrics .lyrics-loader::before,
+      .section .container-lyrics .lyrics-loader::after {
+        content: "";
+        grid-area: 1/1;
+        margin: 2.2px;
+        border: inherit;
+        border-radius: 50%;
+      }
+
+      .section .container-lyrics .lyrics-loader::before {
+        border-color: #474bff #0000;
+        animation: inherit;
+        animation-duration: 0.5s;
+        animation-direction: reverse;
+      }
+
+      .section .container-lyrics .lyrics-loader::after {
+        margin: 8.9px;
+      }
+
+      @keyframes lyrics-loader {
+        100% {
+          transform: rotate(1turn);
+        }
+      }
+
       @media (max-width: 950px) {
         .section {
           display: block;
@@ -195,12 +236,16 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
           height: max-content;
         }
 
+        .section .container-form .title {
+          font-size: 25px;
+        }
+
         .section .container-lyrics {
           height: max-content;
         }
 
-        .section .container-form .title {
-          font-size: 25px;
+        .section .container-lyrics .lyrics-loader {
+          margin-top: 100px;
         }
       }
 
@@ -221,12 +266,16 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
   ],
 })
 export class AppComponent {
-  title = "Karmapolitan";
+  title: string = "Karmapolitan";
 
   searchForm: FormGroup;
+
   lyrics: any | undefined;
+
   errorMessage: string | undefined;
   hasError: boolean | undefined;
+
+  loader: boolean | undefined;
 
   constructor(
     private lyricsService: LyricsService,
@@ -238,7 +287,9 @@ export class AppComponent {
     });
   }
 
-  search() {
+  public search() {
+    this.loader = true;
+
     this.lyricsService
       .getLyrics(
         this.searchForm.value.song_name,
@@ -248,16 +299,18 @@ export class AppComponent {
         (result) => {
           this.lyrics = result;
           this.hasError = false;
+          this.loader = false;
         },
         (error) => {
           this.hasError = true;
+          this.loader = false;
           this.lyrics = null;
           this.errorMessage = error.error.error;
         }
       );
   }
 
-  getBackgroundStyle() {
+  public getBackgroundStyle() {
     if (this.lyrics && this.lyrics.header_image_url) {
       return `url('${this.lyrics.header_image_url}')`;
     } else {
