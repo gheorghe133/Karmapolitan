@@ -17,7 +17,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
   template: `
     <section class="section">
       <div class="container-form">
-        <h1 class="title">Karmapolitan</h1>
+        <h1 class="title">{{ title }}</h1>
         <form [formGroup]="searchForm" (onSubmit)="search()">
           <input
             type="text"
@@ -41,6 +41,11 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         </div>
       </div>
       <div class="container-lyrics">
+        <div
+          class="container-lyrics-image"
+          [style.background]="getBackgroundStyle()"
+        ></div>
+
         <div class="information">
           @if (!this.hasError) {
           <img
@@ -130,17 +135,55 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
       .container-lyrics {
         width: 100%;
         height: 100%;
+        position: relative;
+        display: flex;
+      }
+
+      .container-lyrics-image {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        position: absolute;
+        filter: blur(100px);
+        transition: 0.5s ease-in;
+        z-index: -1;
+      }
+
+      .information {
+        position: relative;
+        z-index: 1;
+        padding: 20px;
         overflow-y: auto;
 
-        .information {
-          .image {
-            width: 300px;
-          }
+        .image {
+          width: 300px;
+        }
 
-          .lyrics {
-            white-space: pre-wrap;
-            line-height: 24px;
-          }
+        .lyrics {
+          white-space: pre-wrap;
+          line-height: 24px;
+        }
+      }
+
+      // media queries
+      @media (max-width: 950px) {
+        .section {
+          display: block;
+        }
+
+        .container-form,
+        .container-lyrics {
+          height: max-content;
+        }
+
+        .container-form .title {
+          font-size: 25px;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .information .image {
+          width: 100%;
         }
       }
     `,
@@ -180,5 +223,13 @@ export class AppComponent {
           this.errorMessage = error.error.error;
         }
       );
+  }
+
+  getBackgroundStyle() {
+    if (this.lyrics && this.lyrics.header_image_url) {
+      return `url('${this.lyrics.header_image_url}')`;
+    } else {
+      return "";
+    }
   }
 }
