@@ -150,6 +150,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
       }
 
       .information {
+        width: 100%;
         position: relative;
         z-index: 1;
         padding: 20px;
@@ -182,6 +183,14 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
       }
 
       @media (max-width: 380px) {
+        .container-form form {
+          padding: 0;
+        }
+
+        .container-form .title {
+          letter-spacing: 7px;
+        }
+
         .information .image {
           width: 100%;
         }
