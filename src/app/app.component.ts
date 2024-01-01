@@ -9,11 +9,20 @@ import {
   Validators,
 } from "@angular/forms";
 import { LyricsService } from "./services/LyricsService/lyrics.service";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
   selector: "app-root",
   standalone: true,
   imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterOutlet],
+  animations: [
+    trigger("fadeIn", [
+      transition(":enter", [
+        style({ opacity: 0 }),
+        animate("0.5s", style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
   template: `
     <section class="section">
       <div class="container-form">
@@ -50,15 +59,15 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         </div>
       </div>
       <div class="container-lyrics">
-        @if (loader){
+        @if (loader) {
         <div class="lyrics-loader"></div>
-        } @if(!hasError && !loader && lyrics){
+        } @else if (lyrics && !hasError && !loader) {
         <div
           class="lyrics-background"
           [style.background]="getBackgroundStyle()"
+          [@fadeIn]
         ></div>
-
-        <div class="lyrics-information">
+        <div class="lyrics-information" [@fadeIn]>
           <img
             class="lyrics-image"
             [src]="lyrics.header_image_url"
@@ -179,6 +188,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
 
       .section .container-lyrics .lyrics-information .lyrics-image {
         width: 300px;
+        height: 300px;
       }
 
       .section .container-lyrics .lyrics-information .lyrics-title {
@@ -211,7 +221,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
       }
 
       .section .container-lyrics .lyrics-loader::before {
-        border-color: #474bff #0000;
+        border-color: #1e3a8a;
         animation: inherit;
         animation-duration: 0.5s;
         animation-direction: reverse;
@@ -260,6 +270,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
 
         .section .container-lyrics .lyrics-information .lyrics-image {
           width: 100%;
+          height: 100%;
         }
       }
     `,
