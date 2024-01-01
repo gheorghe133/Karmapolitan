@@ -18,42 +18,44 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
     <section class="section">
       <div class="container-form">
         <h1 class="title">{{ title }}</h1>
-        <form [formGroup]="searchForm" (onSubmit)="search()">
+        <form class="form" [formGroup]="searchForm" (onSubmit)="search()">
           <input
+            class="form-input"
             type="text"
             placeholder="Sont title ..."
             formControlName="song_name"
           />
           <br />
           <input
+            class="form-input"
             type="text"
             placeholder="Sont artist ..."
             formControlName="song_artist"
           />
           <br />
-          <button (click)="search()">Search</button>
+          <button class="form-button" (click)="search()">Search</button>
         </form>
 
         <div class="error-container">
           @if (this.hasError) {
-          <p class="error">{{ this.errorMessage }}</p>
+          <p class="error-message">{{ this.errorMessage }}</p>
           }
         </div>
       </div>
       <div class="container-lyrics">
         <div
-          class="container-lyrics-image"
+          class="lyrics-background"
           [style.background]="getBackgroundStyle()"
         ></div>
 
-        <div class="information">
+        <div class="lyrics-information">
           @if (!this.hasError) {
           <img
-            class="image"
+            class="lyrics-image"
             src="{{ this.lyrics?.header_image_url }}"
             alt="{{ this.lyrics?.header_image_url }}"
           />
-          <h1>{{ this.lyrics?.full_title }}</h1>
+          <h1 class="lyrics-title">{{ this.lyrics?.full_title }}</h1>
           <p class="lyrics">{{ this.lyrics?.lyrics }}</p>
           }
         </div>
@@ -70,76 +72,76 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         align-items: center;
       }
 
-      .container-form {
+      .section .container-form {
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
-        .title {
-          font-size: 35px;
-          letter-spacing: 10px;
-        }
-
-        form {
-          width: 80%;
-          padding: 10px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-
-          input[type="text"] {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            color: #f3f4f6;
-            font-size: 0.875rem;
-            border-radius: 0.375rem;
-            padding: 0.625rem;
-            background-color: #1f2937;
-            border-color: #4b5563;
-            outline: none;
-          }
-
-          input[type="text"]::placeholder {
-            color: #a0aec0;
-          }
-
-          button {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            color: #f3f4f6;
-            font-size: 0.875rem;
-            border-radius: 0.375rem;
-            display: block;
-            padding: 0.625rem;
-            background-color: #1e3a8a;
-            border-color: #1e3a8a;
-            outline: none;
-            cursor: pointer;
-          }
-        }
-
-        .error-container {
-          height: 25px;
-        }
-
-        .error {
-          font-weight: 600;
-          color: #e11d48;
-        }
       }
 
-      .container-lyrics {
+      .section .container-form .title {
+        font-size: 35px;
+        letter-spacing: 10px;
+      }
+
+      .section .container-form .form {
+        width: 80%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .section .container-form .form .form-input {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        color: #f3f4f6;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        padding: 0.625rem;
+        background-color: #1f2937;
+        border-color: #4b5563;
+        outline: none;
+      }
+
+      .section .container-form .form .form-input::placeholder {
+        color: #a0aec0;
+      }
+
+      .section .container-form .form .form-button {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        color: #f3f4f6;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        display: block;
+        padding: 0.625rem;
+        background-color: #1e3a8a;
+        border-color: #1e3a8a;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .section .container-form .error-container {
+        height: 25px;
+      }
+
+      .section .container-form .error-message {
+        font-weight: 600;
+        color: #e11d48;
+      }
+
+      .section .container-lyrics {
         width: 100%;
         height: 100%;
         position: relative;
         display: flex;
       }
 
-      .container-lyrics-image {
+      .section .container-lyrics .lyrics-background {
         height: 100%;
         width: 100%;
         object-fit: cover;
@@ -149,49 +151,56 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
         z-index: -1;
       }
 
-      .information {
+      .section .container-lyrics .lyrics-information {
         width: 100%;
         position: relative;
         z-index: 1;
         padding: 20px;
         overflow-y: auto;
-
-        .image {
-          width: 300px;
-        }
-
-        .lyrics {
-          white-space: pre-wrap;
-          line-height: 24px;
-        }
       }
 
-      // media queries
+      .section .container-lyrics .lyrics-information .lyrics-image {
+        width: 300px;
+      }
+
+      .section .container-lyrics .lyrics-information .lyrics-title {
+        word-break: break-word;
+      }
+
+      .section .container-lyrics .lyrics-information .lyrics {
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 24px;
+      }
+
       @media (max-width: 950px) {
         .section {
           display: block;
         }
 
-        .container-form,
-        .container-lyrics {
+        .section .container-form {
           height: max-content;
         }
 
-        .container-form .title {
+        .section .container-lyrics {
+          height: max-content;
+        }
+
+        .section .container-form .title {
           font-size: 25px;
         }
       }
 
       @media (max-width: 380px) {
-        .container-form form {
+        .section .container-form .form {
           padding: 0;
         }
 
-        .container-form .title {
+        .section .container-form .title {
           letter-spacing: 7px;
         }
 
-        .information .image {
+        .section .container-lyrics .lyrics-information .lyrics-image {
           width: 100%;
         }
       }
@@ -229,6 +238,7 @@ export class AppComponent {
         },
         (error) => {
           this.hasError = true;
+          this.lyrics = null;
           this.errorMessage = error.error.error;
         }
       );
