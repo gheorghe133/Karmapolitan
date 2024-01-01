@@ -4,9 +4,14 @@ Karmapolitan is a straightforward interface designed for displaying song lyrics,
 
 # Table of Contents
 
+- Technologies Used
 - Installation
 - Usage
 - Contributing
+
+# Technologies Used
+
+- Angular: is a popular web framework for building single-page applications (SPAs) and dynamic web applications. It provides a robust set of features and tools for developing scalable and maintainable applications with a modular architecture.
 
 # Installation
 
