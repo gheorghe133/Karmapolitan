@@ -299,7 +299,7 @@ export class AppComponent {
   ) {
     this.searchForm = this.formBuilder.group({
       song_name: [null, [Validators.required]],
-      song_artist: [null, [Validators.required]],
+      song_artist: [null],
     });
   }
 
