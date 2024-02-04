@@ -34,14 +34,12 @@ import { animate, style, transition, trigger } from "@angular/animations";
             placeholder="Song title ..."
             formControlName="song_name"
           />
-          <br />
           <input
             class="form-input"
             type="text"
             placeholder="Song artist ..."
             formControlName="song_artist"
           />
-          <br />
           <button
             class="form-button"
             [disabled]="this.searchForm.invalid"
@@ -122,10 +120,12 @@ import { animate, style, transition, trigger } from "@angular/animations";
         padding: 0.625rem;
         background-color: #1f2937;
         border-color: #4b5563;
+        margin-bottom: 23.5px;
         outline: none;
       }
 
       .section .container-form .form .form-input::placeholder {
+        user-select: none;
         color: #a0aec0;
       }
 
@@ -298,8 +298,8 @@ export class AppComponent {
     private formBuilder: FormBuilder
   ) {
     this.searchForm = this.formBuilder.group({
-      song_name: [null, [Validators.required]],
-      song_artist: [null],
+      song_name: ["", [Validators.required]],
+      song_artist: [""],
     });
   }
 
