@@ -10,6 +10,7 @@ import {
 } from "@angular/forms";
 import { LyricsService } from "./services/LyricsService/lyrics.service";
 import { animate, style, transition, trigger } from "@angular/animations";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -295,11 +296,29 @@ export class AppComponent {
 
   constructor(
     private lyricsService: LyricsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.searchForm = this.formBuilder.group({
-      song_name: ["", [Validators.required]],
-      song_artist: [""],
+      song_name: [null, [Validators.required]],
+      song_artist: [null],
+    });
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      const songName = params["song_name"] || "";
+      const songArtist = params["song_artist"] || "";
+
+      if (songName) {
+        this.searchForm.patchValue({
+          song_name: songName,
+          song_artist: songArtist,
+        });
+
+        this.search();
+      }
     });
   }
 
@@ -316,14 +335,32 @@ export class AppComponent {
           this.lyrics = result;
           this.hasError = false;
           this.loader = false;
+          this.router.navigate([], {
+            queryParams: this.getQueryParams(),
+            queryParamsHandling: "merge",
+            relativeTo: this.route,
+          });
         },
         (error) => {
           this.hasError = true;
           this.loader = false;
           this.lyrics = null;
           this.errorMessage = error.error.error;
+          this.router.navigate([], {
+            queryParams: {},
+            relativeTo: this.route,
+          });
         }
       );
+  }
+
+  private getQueryParams() {
+    return {
+      song_name: this.searchForm.value.song_name,
+      song_artist: this.searchForm.value.song_artist
+        ? this.searchForm.value.song_artist
+        : undefined,
+    };
   }
 
   public getBackgroundStyle() {
