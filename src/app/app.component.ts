@@ -8,9 +8,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { LyricsService } from "./services/LyricsService/lyrics.service";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { ActivatedRoute, Router } from "@angular/router";
+
+import { LyricsService } from "./services/LyricsService/lyrics.service";
 
 @Component({
   selector: "app-root",
@@ -28,7 +29,7 @@ import { ActivatedRoute, Router } from "@angular/router";
     <section class="section">
       <div class="container-form">
         <h1 class="title">{{ title }}</h1>
-        <form class="form" [formGroup]="searchForm" (onSubmit)="search()">
+        <form class="form" [formGroup]="searchForm" (ngSubmit)="search()">
           <input
             class="form-input"
             type="text"
@@ -42,10 +43,10 @@ import { ActivatedRoute, Router } from "@angular/router";
             formControlName="song_artist"
           />
           <button
+            type="submit"
             class="form-button"
-            [disabled]="this.searchForm.invalid"
-            [class.disabled]="this.searchForm.invalid"
-            (click)="search()"
+            [disabled]="this.searchForm.invalid || this.loader"
+            [class.disabled]="this.searchForm.invalid || this.loader"
           >
             Search
           </button>
@@ -101,6 +102,7 @@ import { ActivatedRoute, Router } from "@angular/router";
       .section .container-form .title {
         font-size: 35px;
         letter-spacing: 10px;
+        user-select: none;
       }
 
       .section .container-form .form {
@@ -142,6 +144,7 @@ import { ActivatedRoute, Router } from "@angular/router";
         border-color: #1e3a8a;
         outline: none;
         cursor: pointer;
+        user-select: none;
         transition: 0.2s ease-in;
       }
 
@@ -173,7 +176,7 @@ import { ActivatedRoute, Router } from "@angular/router";
         height: 100%;
         width: 100%;
         position: absolute;
-        filter: blur(100px);
+        filter: blur(150px);
         transition: 0.5s ease-in;
         z-index: -1;
       }
@@ -283,16 +286,16 @@ import { ActivatedRoute, Router } from "@angular/router";
   ],
 })
 export class AppComponent {
-  title: string = "Karmapolitan";
+  title!: string;
 
   searchForm: FormGroup;
 
-  lyrics: any | undefined;
+  lyrics!: any;
 
-  errorMessage: string | undefined;
-  hasError: boolean | undefined;
+  errorMessage!: string;
+  hasError!: boolean;
 
-  loader: boolean | undefined;
+  loader!: boolean;
 
   constructor(
     private lyricsService: LyricsService,
@@ -300,6 +303,8 @@ export class AppComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    this.title = "Karmapolitan";
+
     this.searchForm = this.formBuilder.group({
       song_name: [null, [Validators.required]],
       song_artist: [null],
@@ -307,9 +312,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      const songName = params["song_name"] || "";
-      const songArtist = params["song_artist"] || "";
+    this.route.queryParams.subscribe(({ song_name, song_artist }) => {
+      const songName = song_name || "";
+      const songArtist = song_artist || "";
 
       if (songName) {
         this.searchForm.patchValue({
@@ -330,37 +335,40 @@ export class AppComponent {
         this.searchForm.value.song_name,
         this.searchForm.value.song_artist
       )
-      .subscribe(
-        (result) => {
+      .subscribe({
+        next: (result) => {
           this.lyrics = result;
           this.hasError = false;
           this.loader = false;
-          this.router.navigate([], {
-            queryParams: this.getQueryParams(),
-            queryParamsHandling: "merge",
-            relativeTo: this.route,
-          });
+          this.updateQueryParams();
         },
-        (error) => {
+        error: (error) => {
           this.hasError = true;
           this.loader = false;
           this.lyrics = null;
           this.errorMessage = error.error.error;
-          this.router.navigate([], {
-            queryParams: {},
-            relativeTo: this.route,
-          });
-        }
-      );
+          this.clearQueryParams();
+        },
+      });
   }
 
-  private getQueryParams() {
-    return {
+  private updateQueryParams() {
+    const queryParams = {
       song_name: this.searchForm.value.song_name,
-      song_artist: this.searchForm.value.song_artist
-        ? this.searchForm.value.song_artist
-        : undefined,
+      song_artist: this.searchForm.value.song_artist || undefined,
     };
+    this.router.navigate([], {
+      queryParams,
+      queryParamsHandling: "merge",
+      relativeTo: this.route,
+    });
+  }
+
+  private clearQueryParams() {
+    this.router.navigate([], {
+      queryParams: {},
+      relativeTo: this.route,
+    });
   }
 
   public getBackgroundStyle() {

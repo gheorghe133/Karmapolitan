@@ -10,7 +10,7 @@ export class LyricsService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getLyrics(song_name: string, song_artist: string): Observable<any> {
+  getLyrics(song_name: string, song_artist: string): Observable<Object> {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     const data = {
