@@ -74,7 +74,7 @@ import { LyricsService } from "./services/LyricsService/lyrics.service";
             [alt]="lyrics.header_image_url"
           />
           <h1 class="lyrics-title">{{ lyrics.full_title }}</h1>
-          <p class="lyrics">{{ lyrics.lyrics }}</p>
+          <p class="lyrics" [innerHTML]="lyrics.lyrics"></p>
         </div>
         }
       </div>
